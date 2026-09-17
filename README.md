@@ -12,14 +12,19 @@ situation — no commission-driven agent involved.
 
 ## How it works
 
-1. You answer a handful of quick questions about your housing, work, family,
-   what you own, and your risk tolerance.
-2. The app sends your answers to an LLM (via [OpenRouter](https://openrouter.ai),
-   free-tier model) alongside a fixed reference knowledge block about standard
-   German insurance types.
-3. The result is rendered as three color-coded categories: **Essential**,
-   **Worth Considering**, and **Usually Skippable** — each with a one-sentence,
-   situation-specific reason.
+The app has three tabs:
+
+- **🛡️ Get My Breakdown** — answer a handful of quick questions about your
+  housing, work, family, what you own, and your risk tolerance. The app sends
+  your answers to an LLM (via [OpenRouter](https://openrouter.ai), free-tier
+  model) and renders the result as three color-coded categories: **Essential**,
+  **Worth Considering**, and **Usually Skippable** — each with a one-sentence,
+  situation-specific reason.
+- **📖 Insurance Guide** — a static reference covering the German insurance
+  types the breakdown draws on, grouped the same way, with a short plain-English
+  explanation of each.
+- **💬 Ask a Question** — a small chatbot, scoped to German personal insurance
+  topics, for follow-up questions that don't fit the structured breakdown.
 
 No accounts, no database, no data is stored. Each session is independent.
 
@@ -40,10 +45,14 @@ source .venv/bin/activate
 pip install -r requirements.txt
 ```
 
-Create `.streamlit/secrets.toml` (already gitignored) with your own key:
+Create `.streamlit/secrets.toml` (already gitignored) with your own key plus the
+two prompt secrets (`SYSTEM_PROMPT` for the breakdown, `CHATBOT_SYSTEM_PROMPT`
+for the Q&A tab — see `app.py` for what each is used for):
 
 ```toml
 OPENROUTER_API_KEY = "sk-or-..."
+SYSTEM_PROMPT = "..."
+CHATBOT_SYSTEM_PROMPT = "..."
 ```
 
 Then run:
@@ -58,10 +67,8 @@ streamlit run app.py
 2. Go to [share.streamlit.io](https://share.streamlit.io), connect your GitHub
    account, and create a new app pointing at this repo with entry point
    `app.py`.
-3. In the app's **Settings → Secrets**, add:
-   ```toml
-   OPENROUTER_API_KEY = "sk-or-..."
-   ```
+3. In the app's **Settings → Secrets**, add the same three keys as above
+   (`OPENROUTER_API_KEY`, `SYSTEM_PROMPT`, `CHATBOT_SYSTEM_PROMPT`).
 4. Deploy. The app will be live at `https://<app-name>.streamlit.app`.
 
 ## Project structure
