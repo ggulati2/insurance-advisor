@@ -246,15 +246,20 @@ header[data-testid="stHeader"] {{ background: transparent; }}
 .stApp {{ background: var(--bg-page); }}
 .stApp, .stMarkdown, p, span, label {{ color: var(--ink); }}
 
+/* Streamlit's built-in tooltip popover always renders on a light surface,
+   independent of our theme — pin its text color so it stays readable in
+   dark mode instead of inheriting the near-white --ink value. */
+[data-testid="stTooltipContent"] p {{ color: #0f172a !important; }}
+
 .block-container {{
-    max-width: 760px;
+    max-width: 1040px;
     padding-top: 1.75rem;
     padding-bottom: 3rem;
     padding-left: 1rem;
     padding-right: 1rem;
 }}
 @media (min-width: 640px) {{
-    .block-container {{ padding-left: 1.5rem; padding-right: 1.5rem; padding-top: 2.25rem; }}
+    .block-container {{ padding-left: 2rem; padding-right: 2rem; padding-top: 2.25rem; }}
 }}
 
 /* Theme toggle */
