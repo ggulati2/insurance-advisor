@@ -162,198 +162,329 @@ st.set_page_config(
     layout="centered",
 )
 
-CUSTOM_CSS = """
+# --- Theme (manual toggle, persisted via URL query param — not OS-driven) ---
+
+THEME_TOKENS = {
+    "light": {
+        "bg-page": "#ffffff",
+        "surface": "#ffffff",
+        "surface-subtle": "#f8fafc",
+        "border": "#e2e8f0",
+        "ink": "#0f172a",
+        "ink-soft": "#475569",
+        "ink-faint": "#94a3b8",
+        "accent": "#0f766e",
+        "accent-tint": "rgba(15, 118, 110, 0.08)",
+        "primary-btn-bg": "#0f172a",
+        "primary-btn-bg-hover": "#1e293b",
+        "primary-btn-text": "#ffffff",
+        "shadow-sm": "0 1px 2px rgba(15, 23, 42, 0.06)",
+        "essential": "#16a34a",
+        "essential-text": "#15803d",
+        "considering": "#d97706",
+        "considering-text": "#b45309",
+        "skippable": "#64748b",
+        "skippable-text": "#475569",
+    },
+    "dark": {
+        "bg-page": "#0b1220",
+        "surface": "#111827",
+        "surface-subtle": "#1a2436",
+        "border": "#2a3650",
+        "ink": "#f1f5f9",
+        "ink-soft": "#94a3b8",
+        "ink-faint": "#64748b",
+        "accent": "#2dd4bf",
+        "accent-tint": "rgba(45, 212, 191, 0.12)",
+        "primary-btn-bg": "#f1f5f9",
+        "primary-btn-bg-hover": "#e2e8f0",
+        "primary-btn-text": "#0f172a",
+        "shadow-sm": "0 1px 2px rgba(0, 0, 0, 0.4)",
+        "essential": "#22c55e",
+        "essential-text": "#4ade80",
+        "considering": "#f59e0b",
+        "considering-text": "#fbbf24",
+        "skippable": "#94a3b8",
+        "skippable-text": "#cbd5e1",
+    },
+}
+
+
+def get_theme_name() -> str:
+    return "dark" if st.query_params.get("theme") == "dark" else "light"
+
+
+def toggle_theme() -> None:
+    st.query_params["theme"] = "light" if get_theme_name() == "dark" else "dark"
+
+
+theme_name = get_theme_name()
+tokens = THEME_TOKENS[theme_name]
+root_vars = "\n".join(f"    --{key}: {value};" for key, value in tokens.items())
+
+CUSTOM_CSS = f"""
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
 
-:root {
-    --brand: #4F46E5;
-    --brand-dark: #4338CA;
-    --brand-tint: rgba(79, 70, 229, 0.08);
-    --ink: #14151a;
-    --ink-soft: #5b5f73;
-    --ink-faint: #8a8fa3;
-    --border: #e6e7eb;
-    --surface: #ffffff;
-    --surface-subtle: #f6f6f9;
-    --radius-lg: 16px;
-    --radius-md: 12px;
-    --radius-sm: 8px;
-    --shadow-sm: 0 1px 2px rgba(16, 24, 40, 0.04);
-    --shadow-md: 0 4px 14px rgba(16, 24, 40, 0.07), 0 1px 2px rgba(16, 24, 40, 0.04);
-}
+:root {{
+{root_vars}
+    --radius-lg: 10px;
+    --radius-md: 8px;
+    --radius-sm: 6px;
+}}
 
-html, body, [class*="css"] {
+html, body, [class*="css"] {{
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     color: var(--ink);
-}
+    font-variant-numeric: tabular-nums;
+}}
+.tnum {{ font-variant-numeric: tabular-nums; }}
 
-#MainMenu, footer, [data-testid="stToolbar"] { visibility: hidden; }
-header[data-testid="stHeader"] { background: transparent; }
+#MainMenu, footer, [data-testid="stToolbar"] {{ visibility: hidden; }}
+header[data-testid="stHeader"] {{ background: transparent; }}
 
-.block-container {
+.stApp {{ background: var(--bg-page); }}
+.stApp, .stMarkdown, p, span, label {{ color: var(--ink); }}
+
+.block-container {{
     max-width: 760px;
-    padding-top: 2.25rem;
+    padding-top: 1.75rem;
     padding-bottom: 3rem;
-}
+    padding-left: 1rem;
+    padding-right: 1rem;
+}}
+@media (min-width: 640px) {{
+    .block-container {{ padding-left: 1.5rem; padding-right: 1.5rem; padding-top: 2.25rem; }}
+}}
 
-.app-header { text-align: center; margin-bottom: 2rem; }
+/* Theme toggle */
+.st-key-theme_toggle button {{
+    border: 1px solid var(--border) !important;
+    background: var(--surface) !important;
+    border-radius: 999px !important;
+    color: var(--ink) !important;
+    box-shadow: none !important;
+    transition: background-color 0.15s ease, border-color 0.15s ease;
+}}
+.st-key-theme_toggle button:hover {{
+    background: var(--surface-subtle) !important;
+    border-color: var(--ink-faint) !important;
+}}
 
-.eyebrow {
+.app-header {{ text-align: center; margin-bottom: 1.75rem; }}
+
+.eyebrow {{
     display: inline-block;
     font-size: 0.72rem;
-    font-weight: 700;
-    letter-spacing: 0.07em;
+    font-weight: 600;
+    letter-spacing: 0.06em;
     text-transform: uppercase;
-    color: var(--brand);
-    background: var(--brand-tint);
+    color: var(--accent);
+    background: var(--accent-tint);
     padding: 0.32rem 0.85rem;
     border-radius: 999px;
     margin-bottom: 1rem;
-}
+}}
 
-.app-header h1 {
-    font-size: 2.15rem;
-    font-weight: 800;
+.app-header h1 {{
+    font-size: 1.9rem;
+    font-weight: 700;
     letter-spacing: -0.02em;
     margin: 0 0 0.5rem 0;
     color: var(--ink);
-}
+}}
 
-.app-header p {
-    font-size: 1.05rem;
+.app-header p {{
+    font-size: 1rem;
     color: var(--ink-soft);
     margin: 0;
     line-height: 1.5;
-}
+}}
 
-.tab-intro {
+.tab-intro {{
     color: var(--ink-soft);
-    font-size: 0.96rem;
+    font-size: 0.94rem;
     line-height: 1.55;
     margin: 0.25rem 0 1.4rem 0;
-}
+}}
 
-/* Tabs — segmented-control look */
-[data-testid="stTabs"] [role="tablist"] {
+/* Tabs — segmented-control look, accent used only for the active indicator */
+[data-testid="stTabs"] [role="tablist"] {{
     gap: 4px;
     background: var(--surface-subtle);
-    padding: 5px;
+    padding: 4px;
     border-radius: var(--radius-md);
     border-bottom: none;
-}
-[data-testid="stTab"] {
-    height: 40px;
+    flex-wrap: wrap;
+}}
+[data-testid="stTab"] {{
+    height: 38px;
     border-radius: var(--radius-sm);
-    padding: 0 16px;
+    padding: 0 14px;
     color: var(--ink-soft);
     font-weight: 500;
-    font-size: 0.92rem;
-}
-[data-testid="stTab"][aria-selected="true"] {
+    font-size: 0.9rem;
+    transition: background-color 0.15s ease, color 0.15s ease;
+}}
+[data-testid="stTab"][aria-selected="true"] {{
     background: var(--surface);
     color: var(--ink);
     box-shadow: var(--shadow-sm);
-}
-[data-testid="stTabs"] .react-aria-SelectionIndicator { display: none; }
+    border-bottom: 2px solid var(--accent);
+}}
+[data-testid="stTabs"] .react-aria-SelectionIndicator {{ display: none; }}
 
-@media (max-width: 480px) {
-    [data-testid="stTab"] { padding: 0 10px; font-size: 0.85rem; }
-}
+@media (max-width: 480px) {{
+    [data-testid="stTab"] {{ padding: 0 10px; font-size: 0.82rem; }}
+}}
 
-div[data-testid="stForm"] {
+div[data-testid="stForm"] {{
     border: 1px solid var(--border);
     border-radius: var(--radius-lg);
-    padding: 1.75rem 1.75rem 1.1rem 1.75rem;
+    padding: 1.5rem 1.5rem 1rem 1.5rem;
     background: var(--surface);
-    box-shadow: var(--shadow-md);
-}
+    box-shadow: var(--shadow-sm);
+}}
 
-.section-label {
-    font-size: 0.78rem;
-    font-weight: 700;
+.section-label {{
+    font-size: 0.76rem;
+    font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.05em;
     color: var(--ink-faint);
-    margin: 1.5rem 0 0.6rem 0;
-}
+    margin: 1.4rem 0 0.6rem 0;
+}}
 
-.stButton button, .stFormSubmitButton button {
+/* Force short checkbox fields into a 2-column grid on narrow screens
+   instead of stacking full-width one per row. */
+@media (max-width: 480px) {{
+    div[data-testid="stForm"] [data-testid="stHorizontalBlock"] {{
+        flex-wrap: wrap;
+        row-gap: 0.5rem;
+    }}
+    div[data-testid="stForm"] [data-testid="stHorizontalBlock"] > [data-testid="stColumn"] {{
+        min-width: 45% !important;
+        flex: 1 1 45% !important;
+        width: 45% !important;
+    }}
+}}
+
+.stButton button, .stFormSubmitButton button {{
     border-radius: var(--radius-sm);
     font-weight: 600;
-    transition: transform 0.05s ease, box-shadow 0.15s ease;
-}
-.stFormSubmitButton button[kind="primary"] {
-    box-shadow: var(--shadow-sm);
-}
-.stFormSubmitButton button[kind="primary"]:hover {
-    box-shadow: var(--shadow-md);
-    transform: translateY(-1px);
-}
+    border: 1px solid var(--border);
+    transition: background-color 0.15s ease, border-color 0.15s ease;
+}}
+.stFormSubmitButton button[kind="primary"] {{
+    background: var(--primary-btn-bg) !important;
+    color: var(--primary-btn-text) !important;
+    border: 1px solid var(--primary-btn-bg) !important;
+}}
+.stFormSubmitButton button[kind="primary"]:hover {{
+    background: var(--primary-btn-bg-hover) !important;
+    border-color: var(--primary-btn-bg-hover) !important;
+}}
 
-.insurance-card {
-    border: 1px solid rgba(16, 24, 40, 0.05);
+/* Flat bordered cards — a thin colored left edge is the only semantic color cue */
+.insurance-card {{
+    background: var(--surface);
+    border: 1px solid var(--border);
     border-radius: var(--radius-md);
-    padding: 1rem 1.15rem;
-    margin-bottom: 0.7rem;
-    border-left: 4px solid;
+    padding: 0.9rem 1.1rem;
+    margin-bottom: 0.6rem;
+    border-left: 3px solid;
     box-shadow: var(--shadow-sm);
-    transition: transform 0.12s ease, box-shadow 0.15s ease;
-}
-.insurance-card:hover {
-    transform: translateY(-1px);
-    box-shadow: var(--shadow-md);
-}
+    transition: border-color 0.15s ease;
+}}
 
-.insurance-card .item-name {
+.insurance-card .item-name {{
     font-weight: 600;
-    font-size: 1.02rem;
+    font-size: 1rem;
     margin-bottom: 0.25rem;
-}
-.insurance-card .item-name-de {
+    color: var(--ink);
+}}
+.insurance-card .item-name-de {{
     font-weight: 400;
     font-size: 0.86em;
     color: var(--ink-faint);
-}
+}}
 
-.insurance-card .item-reason {
-    font-size: 0.93rem;
+.insurance-card .item-reason {{
+    font-size: 0.92rem;
     color: var(--ink-soft);
     line-height: 1.5;
-}
+}}
 
-.card-essential { background: #eefaf1; border-left-color: #2e9e5b; }
-.card-essential .item-name { color: #1f6b3d; }
+.card-essential {{ border-left-color: var(--essential); }}
+.card-essential .item-name {{ color: var(--essential-text); }}
 
-.card-considering { background: #fff8e8; border-left-color: #d99b1d; }
-.card-considering .item-name { color: #8a6110; }
+.card-considering {{ border-left-color: var(--considering); }}
+.card-considering .item-name {{ color: var(--considering-text); }}
 
-.card-skippable { background: #f4f5f6; border-left-color: #9aa4ae; }
-.card-skippable .item-name { color: #5a6570; }
+.card-skippable {{ border-left-color: var(--skippable); }}
+.card-skippable .item-name {{ color: var(--skippable-text); }}
 
-.category-heading {
-    font-size: 1.2rem;
+.category-heading {{
+    font-size: 1.1rem;
     font-weight: 700;
     letter-spacing: -0.01em;
-    margin: 1.9rem 0 0.8rem 0;
+    margin: 1.75rem 0 0.75rem 0;
     color: var(--ink);
-}
+}}
 
-.footer-disclaimer {
+.footer-disclaimer {{
     margin-top: 2.5rem;
     padding: 1rem 1.25rem;
     background: var(--surface-subtle);
     border: 1px solid var(--border);
     border-radius: var(--radius-md);
-    font-size: 0.83rem;
+    font-size: 0.82rem;
     color: var(--ink-faint);
     text-align: center;
     line-height: 1.55;
-}
+}}
+
+/* Widget surfaces follow the same theme tokens in dark mode */
+[data-testid="stExpander"],
+[data-testid="stChatInput"],
+[data-testid="stChatMessage"] {{
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    color: var(--ink);
+}}
+[data-testid="stSelectbox"] input,
+[data-testid="stSelectbox"] [role="group"],
+[data-testid="stSelectbox"] button {{
+    background: var(--surface) !important;
+    border-color: var(--border) !important;
+    color: var(--ink) !important;
+    border-radius: var(--radius-sm);
+}}
+[data-testid="stChatInput"],
+[data-testid="stChatInput"] > div {{
+    background: var(--surface) !important;
+    border-color: var(--border) !important;
+}}
+[data-testid="stChatInputTextArea"] {{
+    background: var(--surface) !important;
+    color: var(--ink) !important;
+}}
+[role="listbox"], [role="option"] {{
+    background: var(--surface) !important;
+    color: var(--ink) !important;
+}}
+a, a:visited {{ color: var(--accent); }}
 </style>
 """
 
 st.markdown(CUSTOM_CSS, unsafe_allow_html=True)
+
+top_spacer, top_toggle = st.columns([10, 1])
+with top_toggle:
+    if st.button("🌙" if theme_name == "light" else "☀️", key="theme_toggle", help="Toggle dark mode"):
+        toggle_theme()
+        st.rerun()
 
 st.markdown(
     f"""
