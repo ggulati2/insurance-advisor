@@ -11,14 +11,14 @@ MODEL = "liquid/lfm-2.5-2.6b:free"
 OPENROUTER_URL = "https://openrouter.ai/api/v1/chat/completions"
 
 CATEGORY_META = {
-    "essential": {"label": "Essential", "icon": "✅", "css": "card-essential"},
-    "situational": {"label": "Situational", "icon": "🤔", "css": "card-considering"},
-    "skippable": {"label": "Often Skippable", "icon": "⏭️", "css": "card-skippable"},
+    "essential": {"label": "Essential", "css": "card-essential"},
+    "situational": {"label": "Situational", "css": "card-considering"},
+    "skippable": {"label": "Often Skippable", "css": "card-skippable"},
 }
 
 GUIDE_ENTRIES = [
     {
-        "category": "essential", "icon": "🛟",
+        "category": "essential",
         "name": "Private liability insurance", "name_de": "Privathaftpflichtversicherung",
         "blurb": (
             "If you accidentally break, damage, or injure something or someone else — a "
@@ -29,7 +29,7 @@ GUIDE_ENTRIES = [
         ),
     },
     {
-        "category": "situational", "icon": "💼",
+        "category": "situational",
         "name": "Occupational disability insurance", "name_de": "Berufsunfähigkeitsversicherung",
         "blurb": (
             "Replaces a portion of your income if illness or injury permanently stops you from "
@@ -38,7 +38,7 @@ GUIDE_ENTRIES = [
         ),
     },
     {
-        "category": "situational", "icon": "📦",
+        "category": "situational",
         "name": "Household contents insurance", "name_de": "Hausratversicherung",
         "blurb": (
             "Covers your belongings inside your home — furniture, electronics, clothing — "
@@ -47,7 +47,7 @@ GUIDE_ENTRIES = [
         ),
     },
     {
-        "category": "situational", "icon": "🏠",
+        "category": "situational",
         "name": "Building insurance", "name_de": "Wohngebäudeversicherung",
         "blurb": (
             "Protects the physical structure of a building against fire, storm, and water "
@@ -56,7 +56,7 @@ GUIDE_ENTRIES = [
         ),
     },
     {
-        "category": "situational", "icon": "🐕",
+        "category": "situational",
         "name": "Dog liability insurance", "name_de": "Hundehaftpflichtversicherung",
         "blurb": (
             "A liability policy specifically for damage your dog causes — a torn coat, a "
@@ -65,7 +65,7 @@ GUIDE_ENTRIES = [
         ),
     },
     {
-        "category": "situational", "icon": "⚖️",
+        "category": "situational",
         "name": "Legal protection insurance", "name_de": "Rechtsschutzversicherung",
         "blurb": (
             "Covers legal fees when you end up in a dispute — with an employer, a landlord, or "
@@ -74,7 +74,7 @@ GUIDE_ENTRIES = [
         ),
     },
     {
-        "category": "situational", "icon": "❤️",
+        "category": "situational",
         "name": "Term life insurance", "name_de": "Risikolebensversicherung",
         "blurb": (
             "Pays a lump sum to whoever you name if you die during the policy term. It exists "
@@ -83,7 +83,7 @@ GUIDE_ENTRIES = [
         ),
     },
     {
-        "category": "situational", "icon": "🚗",
+        "category": "situational",
         "name": "Car liability insurance", "name_de": "KFZ-Haftpflichtversicherung",
         "blurb": (
             "The liability portion of car insurance, and the only part that's legally required "
@@ -92,7 +92,7 @@ GUIDE_ENTRIES = [
         ),
     },
     {
-        "category": "situational", "icon": "✈️",
+        "category": "situational",
         "name": "Foreign travel health insurance", "name_de": "Auslandskrankenversicherung",
         "blurb": (
             "German statutory health insurance often doesn't reliably cover you once you're "
@@ -101,7 +101,7 @@ GUIDE_ENTRIES = [
         ),
     },
     {
-        "category": "situational", "icon": "🧳",
+        "category": "situational",
         "name": "Trip cancellation insurance", "name_de": "Reiserücktrittsversicherung",
         "blurb": (
             "Reimburses non-refundable trip costs if you have to cancel or cut a trip short — "
@@ -110,7 +110,7 @@ GUIDE_ENTRIES = [
         ),
     },
     {
-        "category": "skippable", "icon": "📱",
+        "category": "skippable",
         "name": "Phone insurance", "name_de": "Handyversicherung",
         "blurb": (
             "Insures your smartphone against damage or theft. It's frequently oversold relative "
@@ -119,7 +119,7 @@ GUIDE_ENTRIES = [
         ),
     },
     {
-        "category": "skippable", "icon": "🎒",
+        "category": "skippable",
         "name": "Luggage insurance", "name_de": "Reisegepäckversicherung",
         "blurb": (
             "Covers lost or damaged luggage while traveling. The coverage is narrow and payouts "
@@ -127,7 +127,7 @@ GUIDE_ENTRIES = [
         ),
     },
     {
-        "category": "skippable", "icon": "🕯️",
+        "category": "skippable",
         "name": "Whole life / funeral insurance",
         "name_de": "Kapitallebensversicherung / Sterbegeldversicherung",
         "blurb": (
@@ -137,7 +137,7 @@ GUIDE_ENTRIES = [
         ),
     },
     {
-        "category": "skippable", "icon": "🩹",
+        "category": "skippable",
         "name": "Private accident insurance", "name_de": "Private Unfallversicherung",
         "blurb": (
             "Pays out for injuries from accidents, on top of whatever statutory or occupational "
@@ -146,7 +146,7 @@ GUIDE_ENTRIES = [
         ),
     },
     {
-        "category": "skippable", "icon": "🪟",
+        "category": "skippable",
         "name": "Glass insurance", "name_de": "Glasversicherung",
         "blurb": (
             "Covers breakage of windows, mirrors, and glass fixtures in your home. It's a "
@@ -384,6 +384,10 @@ div[data-testid="stForm"] {{
     background: var(--primary-btn-bg-hover) !important;
     border-color: var(--primary-btn-bg-hover) !important;
 }}
+.stButton button p, .stFormSubmitButton button p,
+.stButton button span, .stFormSubmitButton button span {{
+    color: inherit !important;
+}}
 
 /* Flat bordered cards — a thin colored left edge is the only semantic color cue */
 .insurance-card {{
@@ -489,8 +493,8 @@ with top_toggle:
 st.markdown(
     f"""
     <div class="app-header">
-        <span class="eyebrow">🇩🇪 For Germany · Educational, not advice</span>
-        <h1>🛡️ {APP_TITLE}</h1>
+        <span class="eyebrow">For Germany · Educational, not advice</span>
+        <h1>{APP_TITLE}</h1>
         <p>An unbiased, personalized breakdown of the insurance you actually need
         — no commission, no sales pitch.</p>
     </div>
@@ -611,8 +615,8 @@ def dedupe_categories(essential: list, considering: list, skippable: list):
     return deduped
 
 
-def render_category(title: str, icon: str, items: list, css_class: str):
-    st.markdown(f'<div class="category-heading">{icon} {title}</div>', unsafe_allow_html=True)
+def render_category(title: str, items: list, css_class: str):
+    st.markdown(f'<div class="category-heading">{title}</div>', unsafe_allow_html=True)
     if not items:
         st.markdown(
             f'<div class="insurance-card {css_class}">'
@@ -643,13 +647,13 @@ def render_guide():
         meta = CATEGORY_META[cat_key]
         entries = [e for e in GUIDE_ENTRIES if e["category"] == cat_key]
         st.markdown(
-            f'<div class="category-heading">{meta["icon"]} {meta["label"]}</div>',
+            f'<div class="category-heading">{meta["label"]}</div>',
             unsafe_allow_html=True,
         )
         for entry in entries:
             st.markdown(
                 f'<div class="insurance-card {meta["css"]}">'
-                f'<div class="item-name">{entry["icon"]} {entry["name"]} '
+                f'<div class="item-name">{entry["name"]} '
                 f'<span class="item-name-de">({entry["name_de"]})</span></div>'
                 f'<div class="item-reason">{entry["blurb"]}</div>'
                 f"</div>",
@@ -683,12 +687,12 @@ def render_breakdown_tab():
         st.markdown('<div class="section-label">What You Own</div>', unsafe_allow_html=True)
         col3, col4, col5 = st.columns(3)
         with col3:
-            car = st.checkbox("🚗 Owns a car")
+            car = st.checkbox("Owns a car")
         with col4:
-            dog = st.checkbox("🐕 Owns a dog")
+            dog = st.checkbox("Owns a dog")
         with col5:
-            valuables = st.checkbox("💍 Notable valuables")
-        loan = st.checkbox("🏦 Has a mortgage or major loan")
+            valuables = st.checkbox("Notable valuables")
+        loan = st.checkbox("Has a mortgage or major loan")
 
         st.markdown('<div class="section-label">Risk Tolerance</div>', unsafe_allow_html=True)
         risk = st.select_slider(
@@ -696,7 +700,7 @@ def render_breakdown_tab():
             options=["Low", "Medium", "High"], value="Medium",
         )
 
-        with st.expander("🔍 A few more details (optional — sharpens your breakdown)"):
+        with st.expander("A few more details (optional — sharpens your breakdown)"):
             travel = st.selectbox(
                 "How often do you travel?",
                 [
@@ -707,11 +711,11 @@ def render_breakdown_tab():
             )
             col6, col7, col8 = st.columns(3)
             with col6:
-                equity = st.checkbox("📈 Invests in stocks/ETFs")
+                equity = st.checkbox("Invests in stocks/ETFs")
             with col7:
-                premium_card = st.checkbox("💳 Premium travel card")
+                premium_card = st.checkbox("Premium travel card")
             with col8:
-                sends_money_abroad = st.checkbox("🌍 Supports family abroad")
+                sends_money_abroad = st.checkbox("Supports family abroad")
 
         submitted = st.form_submit_button(
             "Get my breakdown", use_container_width=True, type="primary"
@@ -757,9 +761,9 @@ def render_breakdown_tab():
 
         if result:
             st.divider()
-            render_category("Essential", "✅", essential, "card-essential")
-            render_category("Worth Considering", "🤔", considering, "card-considering")
-            render_category("Usually Skippable", "⏭️", skippable, "card-skippable")
+            render_category("Essential", essential, "card-essential")
+            render_category("Worth Considering", considering, "card-considering")
+            render_category("Usually Skippable", skippable, "card-skippable")
 
 
 def render_chat_tab():
@@ -805,7 +809,7 @@ def render_chat_tab():
 
 
 tab_breakdown, tab_guide, tab_chat = st.tabs(
-    ["🛡️ Get My Breakdown", "📖 Insurance Guide", "💬 Ask a Question"]
+    ["Get My Breakdown", "Insurance Guide", "Ask a Question"]
 )
 
 with tab_breakdown:
